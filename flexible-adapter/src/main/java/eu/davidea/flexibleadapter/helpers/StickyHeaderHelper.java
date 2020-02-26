@@ -16,15 +16,15 @@
 package eu.davidea.flexibleadapter.helpers;
 
 import android.animation.Animator;
-import androidx.core.view.ViewCompat;
-import androidx.recyclerview.widget.OrientationHelper;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
 
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.OrientationHelper;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.FlexibleAdapter.OnStickyHeaderChangeListener;
 import eu.davidea.flexibleadapter.items.IHeader;
@@ -117,8 +117,8 @@ public final class StickyHeaderHelper extends OnScrollListener {
         return mHeaderPosition;
     }
 
-    private boolean hasStickyHeaderTranslated(int position) {
-        RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(position);
+    private boolean hasStickyHeaderTranslated() {
+        RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(0);
         return vh != null && (vh.itemView.getX() < 0 || vh.itemView.getY() < 0);
     }
 
@@ -210,8 +210,12 @@ public final class StickyHeaderHelper extends OnScrollListener {
                                     mRecyclerView.getLayoutManager().getRightDecorationWidth(nextChild);
                             headerOffsetX = Math.min(nextHeaderOffsetX, 0);
                             // Early remove the elevation/shadow to match with the next view
-                            if (nextHeaderOffsetX < 5) elevation = 0f;
-                            if (headerOffsetX < 0) break;
+                            if (nextHeaderOffsetX < 5) {
+                                elevation = 0f;
+                            }
+                            if (headerOffsetX < 0) {
+                                break;
+                            }
                         }
                     } else {
                         if (nextChild.getTop() > 0) {
@@ -221,8 +225,12 @@ public final class StickyHeaderHelper extends OnScrollListener {
                                     mRecyclerView.getLayoutManager().getBottomDecorationHeight(nextChild);
                             headerOffsetY = Math.min(nextHeaderOffsetY, 0);
                             // Early remove the elevation/shadow to match with the next view
-                            if (nextHeaderOffsetY < 5) elevation = 0f;
-                            if (headerOffsetY < 0) break;
+                            if (nextHeaderOffsetY < 5) {
+                                elevation = 0f;
+                            }
+                            if (headerOffsetY < 0) {
+                                break;
+                            }
                         }
                     }
                 }
@@ -271,14 +279,18 @@ public final class StickyHeaderHelper extends OnScrollListener {
         params.width = view.getLayoutParams().width;
         params.height = view.getLayoutParams().height;
         // Margins from current offset
-        if (params.leftMargin == 0)
+        if (params.leftMargin == 0) {
             params.leftMargin = mRecyclerView.getLayoutManager().getLeftDecorationWidth(mStickyHeaderViewHolder.itemView);
-        if (params.topMargin == 0)
+        }
+        if (params.topMargin == 0) {
             params.topMargin = mRecyclerView.getLayoutManager().getTopDecorationHeight(mStickyHeaderViewHolder.itemView);
-        if (params.rightMargin == 0)
+        }
+        if (params.rightMargin == 0) {
             params.rightMargin = mRecyclerView.getLayoutManager().getRightDecorationWidth(mStickyHeaderViewHolder.itemView);
-        if (params.bottomMargin == 0)
+        }
+        if (params.bottomMargin == 0) {
             params.bottomMargin = mRecyclerView.getLayoutManager().getBottomDecorationHeight(mStickyHeaderViewHolder.itemView);
+        }
     }
 
     /**
@@ -287,7 +299,9 @@ public final class StickyHeaderHelper extends OnScrollListener {
      */
     @SuppressWarnings("unchecked")
     private void restoreHeaderItemVisibility() {
-        if (mRecyclerView == null) return;
+        if (mRecyclerView == null) {
+            return;
+        }
         // Restore every header item visibility
         for (int i = 0; i < mRecyclerView.getChildCount(); i++) {
             View oldHeader = mRecyclerView.getChildAt(i);
@@ -376,7 +390,7 @@ public final class StickyHeaderHelper extends OnScrollListener {
     private int getStickyPosition(int adapterPosHere) {
         if (adapterPosHere == RecyclerView.NO_POSITION) {
             adapterPosHere = mAdapter.getFlexibleLayoutManager().findFirstVisibleItemPosition();
-            if (adapterPosHere == 0 && !hasStickyHeaderTranslated(0)) {
+            if (adapterPosHere == 0 && !hasStickyHeaderTranslated()) {
                 return RecyclerView.NO_POSITION;
             }
         }
